@@ -90,8 +90,8 @@ type BuildResult<T> = result::Result<T, Error>;
 pub struct Builder {
     module: dr::Module,
     next_id: u32,
-    function: Option<dr::Function>,
-    block: Option<dr::Block>,
+    pub function: Option<dr::Function>,
+    pub block: Option<dr::Block>,
     version: Option<(u8, u8)>,
 }
 
@@ -130,8 +130,12 @@ impl Builder {
 
     /// Returns the next unused id.
     pub fn id(&mut self) -> spirv::Word {
+        self.reserve_ids(1)
+    }
+
+    pub fn reserve_ids(&mut self, range: spirv::Word) -> spirv::Word {
         let id = self.next_id;
-        self.next_id += 1;
+        self.next_id += range;
         id
     }
 
