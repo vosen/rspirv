@@ -437,8 +437,13 @@ impl Builder {
 
     /// Appends an OpConstant instruction with the given 32-bit float `value`.
     /// or the module if no block is under construction.
-    pub fn constant_f32(&mut self, result_type: spirv::Word, value: f32) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_f32(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        value: f32
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         let inst = dr::Instruction::new(
             spirv::Op::Constant,
             Some(result_type),
@@ -450,8 +455,12 @@ impl Builder {
     }
 
     /// Appends an OpConstant instruction with the given 64-bit float `value`.
-    pub fn constant_f64(&mut self, result_type: spirv::Word, value: f64) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_f64(&mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        value: f64
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         let inst = dr::Instruction::new(
             spirv::Op::Constant,
             Some(result_type),
@@ -464,8 +473,13 @@ impl Builder {
 
     /// Appends an OpConstant instruction with the given 32-bit integer `value`.
     /// or the module if no block is under construction.
-    pub fn constant_u32(&mut self, result_type: spirv::Word, value: u32) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_u32(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        value: u32
+     ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         let inst = dr::Instruction::new(
             spirv::Op::Constant,
             Some(result_type),
@@ -477,8 +491,13 @@ impl Builder {
     }
 
     /// Appends an OpConstant instruction with the given 64-bit integer `value`.
-    pub fn constant_u64(&mut self, result_type: spirv::Word, value: u64) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_u64(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        value: u64,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         let inst = dr::Instruction::new(
             spirv::Op::Constant,
             Some(result_type),
@@ -491,8 +510,13 @@ impl Builder {
 
     /// Appends an OpSpecConstant instruction with the given 32-bit float `value`.
     /// or the module if no block is under construction.
-    pub fn spec_constant_f32(&mut self, result_type: spirv::Word, value: f32) -> spirv::Word {
-        let id = self.id();
+    pub fn spec_constant_f32(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        value: f32,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         let inst = dr::Instruction::new(
             spirv::Op::SpecConstant,
             Some(result_type),
@@ -504,8 +528,13 @@ impl Builder {
     }
 
     /// Appends an OpSpecConstant instruction with the given 64-bit float `value`.
-    pub fn spec_constant_f64(&mut self, result_type: spirv::Word, value: f64) -> spirv::Word {
-        let id = self.id();
+    pub fn spec_constant_f64(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        value: f64,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         let inst = dr::Instruction::new(
             spirv::Op::SpecConstant,
             Some(result_type),
@@ -693,16 +722,16 @@ mod tests {
         let mut b = Builder::new();
         let float = b.type_float(32);
         // Normal numbers
-        b.constant_f32(float, 3.14);
-        b.constant_f32(float, 2e-10);
+        b.constant_f32(float, None, 3.14);
+        b.constant_f32(float, None, 2e-10);
         // Zero
-        b.constant_f32(float, 0.);
+        b.constant_f32(float, None, 0.);
         // Inf
-        b.constant_f32(float, f32::NEG_INFINITY);
+        b.constant_f32(float, None, f32::NEG_INFINITY);
         // Subnormal numbers
-        b.constant_f32(float, -1.0e-40_f32);
+        b.constant_f32(float, None, -1.0e-40_f32);
         // Nan
-        b.constant_f32(float, f32::NAN);
+        b.constant_f32(float, None, f32::NAN);
         let m = b.module();
         assert_eq!(7, m.types_global_values.len());
 
@@ -752,15 +781,15 @@ mod tests {
         let mut b = Builder::new();
         let float = b.type_float(32);
         // Normal numbers
-        b.spec_constant_f32(float, 10.);
+        b.spec_constant_f32(float, None, 10.);
         // Zero
-        b.spec_constant_f32(float, -0.);
+        b.spec_constant_f32(float, None, -0.);
         // Inf
-        b.spec_constant_f32(float, f32::INFINITY);
+        b.spec_constant_f32(float, None, f32::INFINITY);
         // Subnormal numbers
-        b.spec_constant_f32(float, 1.0e-40_f32);
+        b.spec_constant_f32(float, None, 1.0e-40_f32);
         // Nan
-        b.spec_constant_f32(float, f32::NAN);
+        b.spec_constant_f32(float, None, f32::NAN);
         let m = b.module();
         assert_eq!(6, m.types_global_values.len());
 
@@ -866,7 +895,7 @@ mod tests {
         assert_eq!(1, float);
         let f32ff32 = b.type_function(float, vec![float]);
         assert_eq!(2, f32ff32);
-        let c0 = b.constant_f32(float, 0.0f32);
+        let c0 = b.constant_f32(float, None, 0.0f32);
         assert_eq!(3, c0);
 
         let fid = b.begin_function(float, None, spirv::FunctionControl::NONE, f32ff32).unwrap();
