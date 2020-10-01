@@ -389,7 +389,7 @@ pub fn gen_dr_builder_constants(grammar: &structs::Grammar) -> TokenStream {
     let elements = grammar.instructions.iter().filter(|inst| {
         inst.class == Some(structs::Class::Constant) && inst.opname != "OpConstant" && inst.opname != "OpSpecConstant"
     }).map(|inst| {
-        let (params, generic) = get_param_list(&inst.operands, false, kinds);
+        let (params, generic) = get_param_list(&inst.operands, true, kinds);
         let extras = get_push_extras(&inst.operands, kinds, quote! { inst.operands });
         let opcode = as_ident(&inst.opname[2..]);
         let comment = format!("Appends an Op{} instruction.", opcode);
@@ -398,7 +398,7 @@ pub fn gen_dr_builder_constants(grammar: &structs::Grammar) -> TokenStream {
         quote! {
             #[doc = #comment]
             pub fn #name#generic(&mut self,#(#params),*) -> spirv::Word {
-                let id = self.id();
+                let id = result_id.unwrap_or_else(|| self.id());
                 #[allow(unused_mut)]
                 let mut inst = dr::Instruction::new(
                     spirv::Op::#opcode, Some(result_type), Some(id), vec![#(#init),*]);
