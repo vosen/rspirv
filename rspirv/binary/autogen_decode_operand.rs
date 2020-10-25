@@ -103,6 +103,17 @@ impl<'a> Decoder<'a> {
             Err(Error::StreamExpected(self.offset))
         }
     }
+    #[doc = "Decodes and returns the next SPIR-V word as\na SPIR-V FPDenormMode value."]
+    pub fn fp_denorm_mode(&mut self) -> Result<spirv::FPDenormMode> {
+        if let Ok(word) = self.word() {
+            spirv::FPDenormMode::from_u32(word).ok_or(Error::FPDenormModeUnknown(
+                self.offset - WORD_NUM_BYTES,
+                word,
+            ))
+        } else {
+            Err(Error::StreamExpected(self.offset))
+        }
+    }
     #[doc = "Decodes and returns the next SPIR-V word as\na SPIR-V ExecutionModel value."]
     pub fn execution_model(&mut self) -> Result<spirv::ExecutionModel> {
         if let Ok(word) = self.word() {

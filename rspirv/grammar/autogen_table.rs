@@ -14,6 +14,7 @@ pub enum OperandKind {
     MemoryAccess,
     KernelProfilingInfo,
     SourceLanguage,
+    FPDenormMode,
     ExecutionModel,
     AddressingModel,
     MemoryModel,

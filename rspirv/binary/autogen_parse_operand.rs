@@ -23,6 +23,9 @@ impl<'c, 'd> Parser<'c, 'd> {
             GOpKind::SourceLanguage => {
                 vec![dr::Operand::SourceLanguage(self.decoder.source_language()?)]
             }
+            GOpKind::FPDenormMode => {
+                vec![dr::Operand::FPDenormMode(self.decoder.fp_denorm_mode()?)]
+            }
             GOpKind::ExecutionModel => {
                 vec![dr::Operand::ExecutionModel(self.decoder.execution_model()?)]
             }
@@ -323,6 +326,10 @@ impl<'c, 'd> Parser<'c, 'd> {
             spirv::Decoration::HlslSemanticGOOGLE => {
                 vec![dr::Operand::LiteralString(self.decoder.string()?)]
             }
+            spirv::Decoration::FunctionDenormModeINTEL => vec![
+                dr::Operand::LiteralInt32(self.decoder.int32()?),
+                dr::Operand::FPDenormMode(self.decoder.fp_denorm_mode()?),
+            ],
             _ => vec![],
         })
     }

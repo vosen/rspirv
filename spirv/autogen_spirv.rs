@@ -58,6 +58,36 @@ impl num_traits::FromPrimitive for SourceLanguage {
         Self::from_i64(n as i64)
     }
 }
+#[doc = "/// SPIR-V operand kind: [FPDenormMode](https://www.khronos.org/registry/spir-v/specs/unified1/SPIRV.html#_a_id_fp_denorm_mode_a_fp_denorm_mode)"]
+#[repr(u32)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "serialize", derive(serde::Serialize))]
+#[cfg_attr(feature = "deserialize", derive(serde::Deserialize))]
+pub enum FPDenormMode {
+    Preserve = 0u32,
+    FlushToZero = 1u32,
+}
+#[allow(non_upper_case_globals)]
+impl FPDenormMode {
+    pub fn required_capabilities(self) -> &'static [Capability] {
+        match self {
+            FPDenormMode::Preserve | FPDenormMode::FlushToZero => &[],
+        }
+    }
+}
+impl num_traits::FromPrimitive for FPDenormMode {
+    #[allow(trivial_numeric_casts)]
+    fn from_i64(n: i64) -> Option<Self> {
+        Some(match n as u32 {
+            0u32 => FPDenormMode::Preserve,
+            1u32 => FPDenormMode::FlushToZero,
+            _ => return None,
+        })
+    }
+    fn from_u64(n: u64) -> Option<Self> {
+        Self::from_i64(n as i64)
+    }
+}
 #[doc = "/// SPIR-V operand kind: [ExecutionModel](https://www.khronos.org/registry/spir-v/specs/unified1/SPIRV.html#_a_id_execution_model_a_execution_model)"]
 #[repr(u32)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -1112,6 +1142,7 @@ pub enum Decoration {
     UserSemantic = 5635u32,
     RestrictPointerEXT = 5355u32,
     AliasedPointerEXT = 5356u32,
+    FunctionDenormModeINTEL = 5823u32,
 }
 #[allow(non_upper_case_globals)]
 impl Decoration {
@@ -1134,6 +1165,7 @@ impl Decoration {
             | Decoration::UserSemantic => &[],
             Decoration::MaxByteOffset | Decoration::MaxByteOffsetId => &[Capability::Addresses],
             Decoration::PerVertexNV => &[Capability::FragmentBarycentricNV],
+            Decoration::FunctionDenormModeINTEL => &[Capability::FunctionFloatControlINTEL],
             Decoration::PassthroughNV => &[Capability::GeometryShaderPassthroughNV],
             Decoration::Stream => &[Capability::GeometryStreams],
             Decoration::InputAttachmentIndex => &[Capability::InputAttachment],
@@ -1251,6 +1283,7 @@ impl num_traits::FromPrimitive for Decoration {
             5635u32 => Decoration::UserSemantic,
             5355u32 => Decoration::RestrictPointerEXT,
             5356u32 => Decoration::AliasedPointerEXT,
+            5823u32 => Decoration::FunctionDenormModeINTEL,
             _ => return None,
         })
     }
@@ -1844,6 +1877,7 @@ pub enum Capability {
     FragmentDensityEXT = 5291u32,
     PhysicalStorageBufferAddressesEXT = 5347u32,
     CooperativeMatrixNV = 5357u32,
+    FunctionFloatControlINTEL = 5821u32,
 }
 #[allow(non_upper_case_globals)]
 impl Capability {
@@ -1894,7 +1928,8 @@ impl Capability {
             | Capability::ImageFootprintNV
             | Capability::FragmentBarycentricNV
             | Capability::ComputeDerivativeGroupQuadsNV
-            | Capability::ComputeDerivativeGroupLinearNV => &[],
+            | Capability::ComputeDerivativeGroupLinearNV
+            | Capability::FunctionFloatControlINTEL => &[],
             Capability::GenericPointer => &[Capability::Addresses],
             Capability::SubgroupDispatch => &[Capability::DeviceEnqueue],
             Capability::GeometryPointSize
@@ -2133,6 +2168,7 @@ impl num_traits::FromPrimitive for Capability {
             5291u32 => Capability::FragmentDensityEXT,
             5347u32 => Capability::PhysicalStorageBufferAddressesEXT,
             5357u32 => Capability::CooperativeMatrixNV,
+            5821u32 => Capability::FunctionFloatControlINTEL,
             _ => return None,
         })
     }

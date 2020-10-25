@@ -72,4 +72,5 @@ pub enum Decoration {
     HlslSemanticGOOGLE(String),
     RestrictPointerEXT,
     AliasedPointerEXT,
+    FunctionDenormModeINTEL(u32, spirv::FPDenormMode),
 }

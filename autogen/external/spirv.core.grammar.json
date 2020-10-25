@@ -6118,6 +6118,20 @@
     },
     {
       "category" : "ValueEnum",
+      "kind" : "FPDenormMode",
+      "enumerants" : [
+        {
+          "enumerant" : "Preserve",
+          "value" : 0
+        },
+        {
+          "enumerant" : "FlushToZero",
+          "value" : 1
+        }
+      ]
+    },
+    {
+      "category" : "ValueEnum",
       "kind" : "ExecutionModel",
       "enumerants" : [
         {
@@ -7728,6 +7742,17 @@
           "capabilities" : [ "PhysicalStorageBufferAddressesEXT" ],
           "extensions" : [ "SPV_EXT_physical_storage_buffer" ],
           "version" : "None"
+        },
+        {
+          "enumerant" : "FunctionDenormModeINTEL",
+          "value" : 5823,
+          "capabilities" : [ "FunctionFloatControlINTEL" ],
+          "extensions" : [ "SPV_INTEL_float_controls2" ],
+          "parameters" : [
+            { "kind" : "LiteralInteger", "name" : "'Target Width'" },
+            { "kind" : "FPDenormMode", "name" : "'FP Denorm Mode'" }
+          ],
+          "version" : "None"
         }
       ]
     },
@@ -9196,6 +9221,12 @@
           "value" : 5357,
           "capabilities" : [ "Shader" ],
           "extensions" : [ "SPV_NV_cooperative_matrix" ],
+          "version" : "None"
+        },
+        {
+          "enumerant" : "FunctionFloatControlINTEL",
+          "value" : 5821,
+          "extensions" : [ "SPV_INTEL_float_controls2" ],
           "version" : "None"
         }
       ]

@@ -18,6 +18,7 @@ pub enum Error {
     MemoryAccessUnknown(usize, spirv::Word),
     KernelProfilingInfoUnknown(usize, spirv::Word),
     SourceLanguageUnknown(usize, spirv::Word),
+    FPDenormModeUnknown(usize, spirv::Word),
     ExecutionModelUnknown(usize, spirv::Word),
     AddressingModelUnknown(usize, spirv::Word),
     MemoryModelUnknown(usize, spirv::Word),
@@ -96,6 +97,11 @@ impl fmt::Display for Error {
             Error::SourceLanguageUnknown(index, word) => write!(
                 f,
                 "unknown value {} for operand kind SourceLanguage at index {}",
+                word, index
+            ),
+            Error::FPDenormModeUnknown(index, word) => write!(
+                f,
+                "unknown value {} for operand kind FPDenormMode at index {}",
                 word, index
             ),
             Error::ExecutionModelUnknown(index, word) => write!(
