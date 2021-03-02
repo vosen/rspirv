@@ -69,4 +69,8 @@ pub enum Type {
     },
     PipeStorage,
     NamedBarrier,
+    BufferSurfaceINTEL,
+    StructContinuedINTEL {
+        member_0_type_member_1_type: Vec<spirv::Word>,
+    },
 }

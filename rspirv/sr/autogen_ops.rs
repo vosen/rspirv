@@ -1618,11 +1618,36 @@ pub enum Op {
         operand_1: spirv::Word,
         operand_2: spirv::Word,
     },
-    FunctionPointerINTEL {
+    ConstFunctionPointerINTEL {
         function: spirv::Word,
     },
     FunctionPointerCallINTEL {
         operand_1: Vec<spirv::Word>,
+    },
+    AsmTargetINTEL {
+        asm_target: String,
+    },
+    AsmINTEL {
+        asm_type: spirv::Word,
+        target: spirv::Word,
+        asm_instructions: String,
+        constraints: String,
+    },
+    AsmCallINTEL {
+        asm: spirv::Word,
+        argument_0: Vec<spirv::Word>,
+    },
+    AtomicFMinEXT {
+        pointer: spirv::Word,
+        memory: spirv::Word,
+        semantics: spirv::Word,
+        value: spirv::Word,
+    },
+    AtomicFMaxEXT {
+        pointer: spirv::Word,
+        memory: spirv::Word,
+        semantics: spirv::Word,
+        value: spirv::Word,
     },
     DecorateString {
         target: spirv::Word,
@@ -2093,8 +2118,21 @@ pub enum Op {
     SubgroupAvcSicGetInterRawSadsINTEL {
         payload: spirv::Word,
     },
+    VariableLengthArrayINTEL {
+        lenght: spirv::Word,
+    },
+    SaveMemoryINTEL,
+    RestoreMemoryINTEL {
+        ptr: spirv::Word,
+    },
     LoopControlINTEL {
         loop_control_parameters: Vec<u32>,
+    },
+    PtrCastToCrossWorkgroupINTEL {
+        pointer: spirv::Word,
+    },
+    CrossWorkgroupCastToPtrINTEL {
+        pointer: spirv::Word,
     },
     ReadPipeBlockingINTEL {
         packet_size: spirv::Word,

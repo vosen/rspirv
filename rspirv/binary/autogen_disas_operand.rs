@@ -86,6 +86,12 @@ impl Disassemble for spirv::FPFastMathMode {
         if self.contains(spirv::FPFastMathMode::FAST) {
             bits.push("Fast")
         }
+        if self.contains(spirv::FPFastMathMode::ALLOW_CONTRACT_FAST_INTEL) {
+            bits.push("AllowContractFastINTEL")
+        }
+        if self.contains(spirv::FPFastMathMode::ALLOW_REASSOC_INTEL) {
+            bits.push("AllowReassocINTEL")
+        }
         bits.join("|")
     }
 }
@@ -157,6 +163,9 @@ impl Disassemble for spirv::LoopControl {
         }
         if self.contains(spirv::LoopControl::SPECULATED_ITERATIONS_INTEL) {
             bits.push("SpeculatedIterationsINTEL")
+        }
+        if self.contains(spirv::LoopControl::NO_FUSION_INTEL) {
+            bits.push("NoFusionINTEL")
         }
         bits.join("|")
     }

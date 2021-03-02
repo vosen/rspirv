@@ -619,7 +619,7 @@ pub fn gen_dr_builder_types(grammar: &structs::Grammar) -> TokenStream {
             inst.opname != "OpTypePointer" && inst.opname != "OpTypeOpaque"
     }).map(|inst| {
         // Parameter list for this build method.
-        let param_list = get_param_list(&inst.operands, false, kinds);
+        let param_list = get_param_list(&inst.operands, true, kinds);
         // Initializer list for constructing the operands parameter
         // for Instruction.
         let init_list = get_init_list(&inst.operands[1..]);
@@ -638,8 +638,8 @@ pub fn gen_dr_builder_types(grammar: &structs::Grammar) -> TokenStream {
                 #(#extras)*
                 if let Some(id) = self.dedup_insert_type(&inst) {
                     id
-                } else {
-                    let new_id = self.id();
+                } else { 
+                    let new_id = result_id.unwrap_or_else(|| self.id());
                     inst.result_id = Some(new_id);
                     self.module.types_global_values.push(inst);
                     new_id
@@ -821,7 +821,7 @@ pub fn gen_dr_builder_constants(grammar: &structs::Grammar) -> TokenStream {
                 && inst.opname != "OpSpecConstant"
         })
         .map(|inst| {
-            let params = get_param_list(&inst.operands, false, kinds);
+            let params = get_param_list(&inst.operands, true, kinds);
             let extras = get_push_extras(&inst.operands, kinds, quote! { inst.operands });
             let opcode = as_ident(&inst.opname[2..]);
             let comment = format!("Appends an Op{} instruction.", opcode);
@@ -830,7 +830,7 @@ pub fn gen_dr_builder_constants(grammar: &structs::Grammar) -> TokenStream {
             quote! {
                 #[doc = #comment]
                 pub fn #name(&mut self,#(#params),*) -> spirv::Word {
-                    let id = self.id();
+                    let id = result_id.unwrap_or_else(|| self.id());
                     #[allow(unused_mut)]
                     let mut inst = dr::Instruction::new(
                         spirv::Op::#opcode, Some(result_type), Some(id), vec![#(#init),*]);

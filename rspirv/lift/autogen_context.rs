@@ -6298,7 +6298,7 @@ impl LiftContext {
                 })
                 .ok_or(OperandError::Missing)?,
             }),
-            5600u32 => Ok(ops::Op::FunctionPointerINTEL {
+            5600u32 => Ok(ops::Op::ConstFunctionPointerINTEL {
                 function: (match operands.next() {
                     Some(&dr::Operand::IdRef(ref value)) => Some(*value),
                     Some(_) => Err(OperandError::WrongType)?,
@@ -6318,6 +6318,111 @@ impl LiftContext {
                     }
                     vec
                 },
+            }),
+            5609u32 => Ok(ops::Op::AsmTargetINTEL {
+                asm_target: (match operands.next() {
+                    Some(&dr::Operand::LiteralString(ref value)) => Some(value.clone()),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+            }),
+            5610u32 => Ok(ops::Op::AsmINTEL {
+                asm_type: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                target: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                asm_instructions: (match operands.next() {
+                    Some(&dr::Operand::LiteralString(ref value)) => Some(value.clone()),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                constraints: (match operands.next() {
+                    Some(&dr::Operand::LiteralString(ref value)) => Some(value.clone()),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+            }),
+            5611u32 => Ok(ops::Op::AsmCallINTEL {
+                asm: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                argument_0: {
+                    let mut vec = Vec::new();
+                    while let Some(item) = match operands.next() {
+                        Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                        Some(_) => Err(OperandError::WrongType)?,
+                        None => None,
+                    } {
+                        vec.push(item);
+                    }
+                    vec
+                },
+            }),
+            5614u32 => Ok(ops::Op::AtomicFMinEXT {
+                pointer: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                memory: (match operands.next() {
+                    Some(&dr::Operand::IdScope(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                semantics: (match operands.next() {
+                    Some(&dr::Operand::IdMemorySemantics(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                value: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+            }),
+            5615u32 => Ok(ops::Op::AtomicFMaxEXT {
+                pointer: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                memory: (match operands.next() {
+                    Some(&dr::Operand::IdScope(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                semantics: (match operands.next() {
+                    Some(&dr::Operand::IdMemorySemantics(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+                value: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
             }),
             5632u32 => Ok(ops::Op::DecorateString {
                 target: (match operands.next() {
@@ -8060,6 +8165,23 @@ impl LiftContext {
                 })
                 .ok_or(OperandError::Missing)?,
             }),
+            5818u32 => Ok(ops::Op::VariableLengthArrayINTEL {
+                lenght: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+            }),
+            5819u32 => Ok(ops::Op::SaveMemoryINTEL),
+            5820u32 => Ok(ops::Op::RestoreMemoryINTEL {
+                ptr: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+            }),
             5887u32 => Ok(ops::Op::LoopControlINTEL {
                 loop_control_parameters: {
                     let mut vec = Vec::new();
@@ -8072,6 +8194,22 @@ impl LiftContext {
                     }
                     vec
                 },
+            }),
+            5934u32 => Ok(ops::Op::PtrCastToCrossWorkgroupINTEL {
+                pointer: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
+            }),
+            5938u32 => Ok(ops::Op::CrossWorkgroupCastToPtrINTEL {
+                pointer: (match operands.next() {
+                    Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                    Some(_) => Err(OperandError::WrongType)?,
+                    None => None,
+                })
+                .ok_or(OperandError::Missing)?,
             }),
             5946u32 => Ok(ops::Op::ReadPipeBlockingINTEL {
                 packet_size: (match operands.next() {
@@ -8577,6 +8715,20 @@ impl LiftContext {
             }),
             322u32 => Ok(Type::PipeStorage),
             327u32 => Ok(Type::NamedBarrier),
+            6086u32 => Ok(Type::BufferSurfaceINTEL),
+            6090u32 => Ok(Type::StructContinuedINTEL {
+                member_0_type_member_1_type: {
+                    let mut vec = Vec::new();
+                    while let Some(item) = match operands.next() {
+                        Some(&dr::Operand::IdRef(ref value)) => Some(*value),
+                        Some(_) => Err(OperandError::WrongType)?,
+                        None => None,
+                    } {
+                        vec.push(item);
+                    }
+                    vec
+                },
+            }),
             _ => Err(InstructionError::WrongOpcode),
         }
     }

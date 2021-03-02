@@ -4,8 +4,12 @@
 
 impl Builder {
     #[doc = "Appends an OpConstantTrue instruction."]
-    pub fn constant_true(&mut self, result_type: spirv::Word) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_true(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst =
             dr::Instruction::new(spirv::Op::ConstantTrue, Some(result_type), Some(id), vec![]);
@@ -13,8 +17,12 @@ impl Builder {
         id
     }
     #[doc = "Appends an OpConstantFalse instruction."]
-    pub fn constant_false(&mut self, result_type: spirv::Word) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_false(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst = dr::Instruction::new(
             spirv::Op::ConstantFalse,
@@ -29,9 +37,10 @@ impl Builder {
     pub fn constant_composite(
         &mut self,
         result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
         constituents: impl IntoIterator<Item = spirv::Word>,
     ) -> spirv::Word {
-        let id = self.id();
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst = dr::Instruction::new(
             spirv::Op::ConstantComposite,
@@ -48,11 +57,12 @@ impl Builder {
     pub fn constant_sampler(
         &mut self,
         result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
         sampler_addressing_mode: spirv::SamplerAddressingMode,
         param: u32,
         sampler_filter_mode: spirv::SamplerFilterMode,
     ) -> spirv::Word {
-        let id = self.id();
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst = dr::Instruction::new(
             spirv::Op::ConstantSampler,
@@ -68,8 +78,12 @@ impl Builder {
         id
     }
     #[doc = "Appends an OpConstantNull instruction."]
-    pub fn constant_null(&mut self, result_type: spirv::Word) -> spirv::Word {
-        let id = self.id();
+    pub fn constant_null(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst =
             dr::Instruction::new(spirv::Op::ConstantNull, Some(result_type), Some(id), vec![]);
@@ -77,8 +91,12 @@ impl Builder {
         id
     }
     #[doc = "Appends an OpSpecConstantTrue instruction."]
-    pub fn spec_constant_true(&mut self, result_type: spirv::Word) -> spirv::Word {
-        let id = self.id();
+    pub fn spec_constant_true(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst = dr::Instruction::new(
             spirv::Op::SpecConstantTrue,
@@ -90,8 +108,12 @@ impl Builder {
         id
     }
     #[doc = "Appends an OpSpecConstantFalse instruction."]
-    pub fn spec_constant_false(&mut self, result_type: spirv::Word) -> spirv::Word {
-        let id = self.id();
+    pub fn spec_constant_false(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+    ) -> spirv::Word {
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst = dr::Instruction::new(
             spirv::Op::SpecConstantFalse,
@@ -106,9 +128,10 @@ impl Builder {
     pub fn spec_constant_composite(
         &mut self,
         result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
         constituents: impl IntoIterator<Item = spirv::Word>,
     ) -> spirv::Word {
-        let id = self.id();
+        let id = result_id.unwrap_or_else(|| self.id());
         #[allow(unused_mut)]
         let mut inst = dr::Instruction::new(
             spirv::Op::SpecConstantComposite,
@@ -118,19 +141,6 @@ impl Builder {
         );
         inst.operands
             .extend(constituents.into_iter().map(dr::Operand::IdRef));
-        self.module.types_global_values.push(inst);
-        id
-    }
-    #[doc = "Appends an OpSpecConstantOp instruction."]
-    pub fn spec_constant_op(&mut self, result_type: spirv::Word, opcode: spirv::Op) -> spirv::Word {
-        let id = self.id();
-        #[allow(unused_mut)]
-        let mut inst = dr::Instruction::new(
-            spirv::Op::SpecConstantOp,
-            Some(result_type),
-            Some(id),
-            vec![dr::Operand::LiteralSpecConstantOpInteger(opcode)],
-        );
         self.module.types_global_values.push(inst);
         id
     }

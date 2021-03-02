@@ -252,6 +252,28 @@ impl<'a> Decoder<'a> {
             Err(Error::StreamExpected(self.offset))
         }
     }
+    #[doc = "Decodes and returns the next SPIR-V word as\na SPIR-V FPDenormMode value."]
+    pub fn fp_denorm_mode(&mut self) -> Result<spirv::FPDenormMode> {
+        if let Ok(word) = self.word() {
+            spirv::FPDenormMode::from_u32(word).ok_or(Error::FPDenormModeUnknown(
+                self.offset - WORD_NUM_BYTES,
+                word,
+            ))
+        } else {
+            Err(Error::StreamExpected(self.offset))
+        }
+    }
+    #[doc = "Decodes and returns the next SPIR-V word as\na SPIR-V FPOperationMode value."]
+    pub fn fp_operation_mode(&mut self) -> Result<spirv::FPOperationMode> {
+        if let Ok(word) = self.word() {
+            spirv::FPOperationMode::from_u32(word).ok_or(Error::FPOperationModeUnknown(
+                self.offset - WORD_NUM_BYTES,
+                word,
+            ))
+        } else {
+            Err(Error::StreamExpected(self.offset))
+        }
+    }
     #[doc = "Decodes and returns the next SPIR-V word as\na SPIR-V LinkageType value."]
     pub fn linkage_type(&mut self) -> Result<spirv::LinkageType> {
         if let Ok(word) = self.word() {

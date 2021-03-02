@@ -32,6 +32,8 @@ pub enum Error {
     ImageChannelOrderUnknown(usize, spirv::Word),
     ImageChannelDataTypeUnknown(usize, spirv::Word),
     FPRoundingModeUnknown(usize, spirv::Word),
+    FPDenormModeUnknown(usize, spirv::Word),
+    FPOperationModeUnknown(usize, spirv::Word),
     LinkageTypeUnknown(usize, spirv::Word),
     AccessQualifierUnknown(usize, spirv::Word),
     FunctionParameterAttributeUnknown(usize, spirv::Word),
@@ -171,6 +173,16 @@ impl fmt::Display for Error {
             Error::FPRoundingModeUnknown(index, word) => write!(
                 f,
                 "unknown value {} for operand kind FPRoundingMode at index {}",
+                word, index
+            ),
+            Error::FPDenormModeUnknown(index, word) => write!(
+                f,
+                "unknown value {} for operand kind FPDenormMode at index {}",
+                word, index
+            ),
+            Error::FPOperationModeUnknown(index, word) => write!(
+                f,
+                "unknown value {} for operand kind FPOperationMode at index {}",
                 word, index
             ),
             Error::LinkageTypeUnknown(index, word) => write!(

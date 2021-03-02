@@ -28,6 +28,8 @@ pub enum OperandKind {
     ImageChannelOrder,
     ImageChannelDataType,
     FPRoundingMode,
+    FPDenormMode,
+    FPOperationMode,
     LinkageType,
     AccessQualifier,
     FunctionParameterAttribute,
@@ -3918,7 +3920,7 @@ static INSTRUCTION_TABLE: &[Instruction<'static>] = &[
         ]
     ),
     inst!(
-        FunctionPointerINTEL,
+        ConstFunctionPointerINTEL,
         [FunctionPointersINTEL],
         ["SPV_INTEL_function_pointers"],
         [(IdResultType, One), (IdResult, One), (IdRef, One)]
@@ -3928,6 +3930,70 @@ static INSTRUCTION_TABLE: &[Instruction<'static>] = &[
         [FunctionPointersINTEL],
         ["SPV_INTEL_function_pointers"],
         [(IdResultType, One), (IdResult, One), (IdRef, ZeroOrMore)]
+    ),
+    inst!(
+        AsmTargetINTEL,
+        [AsmINTEL],
+        [],
+        [(IdResultType, One), (IdResult, One), (LiteralString, One)]
+    ),
+    inst!(
+        AsmINTEL,
+        [AsmINTEL],
+        [],
+        [
+            (IdResultType, One),
+            (IdResult, One),
+            (IdRef, One),
+            (IdRef, One),
+            (LiteralString, One),
+            (LiteralString, One)
+        ]
+    ),
+    inst!(
+        AsmCallINTEL,
+        [AsmINTEL],
+        [],
+        [
+            (IdResultType, One),
+            (IdResult, One),
+            (IdRef, One),
+            (IdRef, ZeroOrMore)
+        ]
+    ),
+    inst!(
+        AtomicFMinEXT,
+        [
+            AtomicFloat16MinMaxEXT,
+            AtomicFloat32MinMaxEXT,
+            AtomicFloat64MinMaxEXT
+        ],
+        [],
+        [
+            (IdResultType, One),
+            (IdResult, One),
+            (IdRef, One),
+            (IdScope, One),
+            (IdMemorySemantics, One),
+            (IdRef, One)
+        ]
+    ),
+    inst!(
+        AtomicFMaxEXT,
+        [
+            AtomicFloat16MinMaxEXT,
+            AtomicFloat32MinMaxEXT,
+            AtomicFloat64MinMaxEXT
+        ],
+        [],
+        [
+            (IdResultType, One),
+            (IdResult, One),
+            (IdRef, One),
+            (IdScope, One),
+            (IdMemorySemantics, One),
+            (IdRef, One)
+        ]
     ),
     inst!(
         DecorateString,
@@ -5082,10 +5148,40 @@ static INSTRUCTION_TABLE: &[Instruction<'static>] = &[
         [(IdResultType, One), (IdResult, One), (IdRef, One)]
     ),
     inst!(
+        VariableLengthArrayINTEL,
+        [VariableLengthArrayINTEL],
+        [],
+        [(IdResultType, One), (IdResult, One), (IdRef, One)]
+    ),
+    inst!(
+        SaveMemoryINTEL,
+        [VariableLengthArrayINTEL],
+        [],
+        [(IdResultType, One), (IdResult, One)]
+    ),
+    inst!(
+        RestoreMemoryINTEL,
+        [VariableLengthArrayINTEL],
+        [],
+        [(IdRef, One)]
+    ),
+    inst!(
         LoopControlINTEL,
         [UnstructuredLoopControlsINTEL],
         ["SPV_INTEL_unstructured_loop_controls"],
         [(LiteralInteger, ZeroOrMore)]
+    ),
+    inst!(
+        PtrCastToCrossWorkgroupINTEL,
+        [USMStorageClassesINTEL],
+        [],
+        [(IdResultType, One), (IdResult, One), (IdRef, One)]
+    ),
+    inst!(
+        CrossWorkgroupCastToPtrINTEL,
+        [USMStorageClassesINTEL],
+        [],
+        [(IdResultType, One), (IdResult, One), (IdRef, One)]
     ),
     inst!(
         ReadPipeBlockingINTEL,
@@ -5294,5 +5390,29 @@ static INSTRUCTION_TABLE: &[Instruction<'static>] = &[
             (IdMemorySemantics, One),
             (IdRef, One)
         ]
+    ),
+    inst!(
+        TypeBufferSurfaceINTEL,
+        [VectorComputeINTEL],
+        [],
+        [(IdResult, One)]
+    ),
+    inst!(
+        TypeStructContinuedINTEL,
+        [LongConstantCompositeINTEL],
+        [],
+        [(IdRef, ZeroOrMore)]
+    ),
+    inst!(
+        ConstantCompositeContinuedINTEL,
+        [LongConstantCompositeINTEL],
+        [],
+        [(IdRef, ZeroOrMore)]
+    ),
+    inst!(
+        SpecConstantCompositeContinuedINTEL,
+        [LongConstantCompositeINTEL],
+        [],
+        [(IdRef, ZeroOrMore)]
     ),
 ];

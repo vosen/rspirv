@@ -86,6 +86,8 @@ impl Assemble for dr::Operand {
             dr::Operand::RayQueryCommittedIntersectionType(v) => result.push(v as u32),
             dr::Operand::RayQueryCandidateIntersectionType(v) => result.push(v as u32),
             dr::Operand::FragmentShadingRate(v) => result.push(v.bits()),
+            dr::Operand::FPDenormMode(v) => result.push(v as u32),
+            dr::Operand::FPOperationMode(v) => result.push(v as u32),
         }
     }
 }

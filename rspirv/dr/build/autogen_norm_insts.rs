@@ -14907,6 +14907,112 @@ impl Builder {
         self.insert_into_block(insert_point, inst)?;
         Ok(_id)
     }
+    #[doc = "Appends an OpAtomicFMinEXT instruction to the current block."]
+    pub fn atomic_f_min_ext(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        pointer: spirv::Word,
+        memory: spirv::Word,
+        semantics: spirv::Word,
+        value: spirv::Word,
+    ) -> BuildResult<spirv::Word> {
+        let _id = result_id.unwrap_or_else(|| self.id());
+        #[allow(unused_mut)]
+        let mut inst = dr::Instruction::new(
+            spirv::Op::AtomicFMinEXT,
+            Some(result_type),
+            Some(_id),
+            vec![
+                dr::Operand::IdRef(pointer),
+                dr::Operand::IdScope(memory),
+                dr::Operand::IdMemorySemantics(semantics),
+                dr::Operand::IdRef(value),
+            ],
+        );
+        self.insert_into_block(InsertPoint::End, inst)?;
+        Ok(_id)
+    }
+    #[doc = "Appends an OpAtomicFMinEXT instruction to the current block."]
+    pub fn insert_atomic_f_min_ext(
+        &mut self,
+        insert_point: InsertPoint,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        pointer: spirv::Word,
+        memory: spirv::Word,
+        semantics: spirv::Word,
+        value: spirv::Word,
+    ) -> BuildResult<spirv::Word> {
+        let _id = result_id.unwrap_or_else(|| self.id());
+        #[allow(unused_mut)]
+        let mut inst = dr::Instruction::new(
+            spirv::Op::AtomicFMinEXT,
+            Some(result_type),
+            Some(_id),
+            vec![
+                dr::Operand::IdRef(pointer),
+                dr::Operand::IdScope(memory),
+                dr::Operand::IdMemorySemantics(semantics),
+                dr::Operand::IdRef(value),
+            ],
+        );
+        self.insert_into_block(insert_point, inst)?;
+        Ok(_id)
+    }
+    #[doc = "Appends an OpAtomicFMaxEXT instruction to the current block."]
+    pub fn atomic_f_max_ext(
+        &mut self,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        pointer: spirv::Word,
+        memory: spirv::Word,
+        semantics: spirv::Word,
+        value: spirv::Word,
+    ) -> BuildResult<spirv::Word> {
+        let _id = result_id.unwrap_or_else(|| self.id());
+        #[allow(unused_mut)]
+        let mut inst = dr::Instruction::new(
+            spirv::Op::AtomicFMaxEXT,
+            Some(result_type),
+            Some(_id),
+            vec![
+                dr::Operand::IdRef(pointer),
+                dr::Operand::IdScope(memory),
+                dr::Operand::IdMemorySemantics(semantics),
+                dr::Operand::IdRef(value),
+            ],
+        );
+        self.insert_into_block(InsertPoint::End, inst)?;
+        Ok(_id)
+    }
+    #[doc = "Appends an OpAtomicFMaxEXT instruction to the current block."]
+    pub fn insert_atomic_f_max_ext(
+        &mut self,
+        insert_point: InsertPoint,
+        result_type: spirv::Word,
+        result_id: Option<spirv::Word>,
+        pointer: spirv::Word,
+        memory: spirv::Word,
+        semantics: spirv::Word,
+        value: spirv::Word,
+    ) -> BuildResult<spirv::Word> {
+        let _id = result_id.unwrap_or_else(|| self.id());
+        #[allow(unused_mut)]
+        let mut inst = dr::Instruction::new(
+            spirv::Op::AtomicFMaxEXT,
+            Some(result_type),
+            Some(_id),
+            vec![
+                dr::Operand::IdRef(pointer),
+                dr::Operand::IdScope(memory),
+                dr::Operand::IdMemorySemantics(semantics),
+                dr::Operand::IdRef(value),
+            ],
+        );
+        self.insert_into_block(insert_point, inst)?;
+        Ok(_id)
+    }
     #[doc = "Appends an OpLoopControlINTEL instruction to the current block."]
     pub fn loop_control_intel(
         &mut self,
